@@ -1,0 +1,24 @@
+@startuml
+digraph G {
+    labelloc="b"
+    labeljust="l"
+    label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+            	<TR><TD>id</TD><TD>Tweeter's tweet id</TD></TR>
+            	<TR><TD>parentId</TD><TD>id of parent tweet, null for root</TD></TR>
+            	<TR><TD>mId</TD><TD>foreign key to Mastodon post id, null if post is not published</TD></TR>	</TABLE>>
+
+    "node0" [ label = "<f0> Root|id=1|parentId=null|mId=1" shape = "record" ]
+    "node1" [ label = "<f0> Reply|id=2|parentId=1|mId=null" shape = "record" ]
+    "node2" [ label = "<f0> Reply|id=3|parentId=1|mId=null" shape = "record" ]
+    "node3" [ label = "<f0> Reply|id=4|parentId=3|mId=null" shape = "record" ]
+    "node4" [ label = "<f0> Retweet|id=5|parentId=3|mId=null" shape = "record" ]
+    "node5" [ label = "<f0> Reply|id=6|parentId=5|mId=null" shape = "record" ]
+    "node6" [ label = "<f0> QuotedRetweet|id=7|parentId=5|mId=null" shape = "record" ]
+    "node0" -> "node1"
+    "node0" -> "node2"
+    "node2" -> "node3"
+    "node2" -> "node4"
+    "node4" -> "node5"
+    "node4" -> "node6"
+}
+@enduml

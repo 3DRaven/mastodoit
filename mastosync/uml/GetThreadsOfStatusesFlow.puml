@@ -1,0 +1,8 @@
+@startuml
+title How to get full conversation trees
+Mastosync -> Mastodon : /api/v1/accounts/:id/statuses?exclude_reblogs=true&exclude_replies=true&since_id=? (page size 20)
+Mastodon -> Mastosync : Statuses
+Mastosync -> Mastosync : filter all root statuses (in_reply_to_account_id==null)
+Mastosync -> Mastodon : /api/v1/statuses/:status_id/context
+Mastodon -> Mastosync : descendants statuses (all tree)
+@enduml

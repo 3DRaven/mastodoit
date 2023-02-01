@@ -1,0 +1,3 @@
+Reply from Mastodon user. Look at Mastodon.
+User name: [(${extUserName})]
+Mastodon reply:[(${mastodonReplyLink})]

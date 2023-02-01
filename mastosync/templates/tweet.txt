@@ -1,0 +1,2 @@
+[(${#strings.abbreviate(text,cleanTextLength)})]
+Mastodon reply:[(${mastodonReplyLink})]

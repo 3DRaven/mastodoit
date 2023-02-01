@@ -1,0 +1,11 @@
+@startuml
+title How to publish Mastodon posts and Twitter tweets\nsync of two trees, Mastodon posts and Twitter tweets
+Mastodon -> Migrator : "post 1" from "main Mastodon user"
+Migrator -> Twitter : Create "tweet 1" by "main Twitter user"
+Twitter -> Migrator : Reply to the "tweet 1"
+Migrator -> Mastodon : Create reply "post 2" by "Migrator service user"\nto the Mastodon "post 1"
+Mastodon -> Migrator : Reply to the "post 1"
+Migrator -> Twitter : Create reply "tweet 2" by "Migrator service user"\nto the "tweet 1"
+Twitter -> Migrator : Create "tweet 3"
+Migrator -> Mastodon : Create "post 3" by "main Mastodon user""
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+title Twitter user authorization sequence
+User -> Migrator : get Twitter token
+Migrator -> Pingen : /api/v1/twitter/getAuthUrl
+Pingen -> Pingen : OAuth1.0a Signature
+Pingen -> Twitter : /oauth/request_token with OAuth1.0a signature
+Twitter -> Pingen : oauth_token for user grant access
+Pingen -> Migrator : api.twitter.com/oauth/authorize?oauth_token
+Migrator -> User : api.twitter.com/oauth/authorize?oauth_token
+User -> Browser : Open api.twitter.com/oauth/authorize?oauth_token
+Browser -> User : Login page
+User -> Browser : Login
+Browser -> User : Do you want to authorize Pingen app?
+User -> Browser : Yes
+Browser -> User : PIN code
+User -> Migrator : PIN code
+Migrator -> Twitter : /oauth/access_token?oauth_verifier(PIN code),oauth_token
+Twitter -> Migrator : user creds: oauth_token,oauth_token_secret,user_id,screen_name
+Migrator -> "storage" : Save
+@enduml

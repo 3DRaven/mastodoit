@@ -1,0 +1,19 @@
+@startuml
+title Mastodon user authorization sequence
+User -> Migrator : get Mastodon token
+Migrator -> Pingen : /api/v1/mastodon/getAuthUrl
+Pingen -> Migrator : ${mastodon}/oauth/authorize...
+Migrator -> User : ${mastodon}/oauth/authorize...
+User -> Browser : Open ${mastodon}/oauth/authorize...
+Browser -> User : Login page
+User -> Browser : Login
+Browser -> User : Do you whant to authorize Pingen app?
+User -> Browser : Yes
+Browser -> User : Authorization code
+User -> Migrator : Authorization code
+Migrator -> Pingen : /api/v1/mastodon/getAccessToken?code
+Pingen -> Mastodon : ${mastodon}/oauth/token \ncode, \nclient app creds
+Mastodon -> Pingen : OAuth token
+Pingen -> Migrator : Oauth token
+Migrator -> "storage" : Save
+@enduml

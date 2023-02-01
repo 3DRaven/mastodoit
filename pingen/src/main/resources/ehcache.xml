@@ -1,0 +1,48 @@
+<config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+        xsi:schemaLocation="
+        http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+        http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+    <service>
+        <jsr107:defaults enable-management="true" enable-statistics="true"/>
+    </service>
+
+    <persistence directory="./"/>
+
+    <cache-template name="defaultCacheTemplate">
+        <expiry>
+            <none/>
+        </expiry>
+
+        <listeners>
+            <listener>
+                <class>com.anyqn.mastodon.pingen.util.CacheLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+                <events-to-fire-on>EVICTED</events-to-fire-on>
+            </listener>
+        </listeners>
+
+        <resources>
+            <heap unit="entries">512</heap>
+            <disk unit="MB" persistent="true">50</disk>
+        </resources>
+    </cache-template>
+
+    <cache alias="registrations" uses-template="defaultCacheTemplate">
+        <key-type>java.lang.String</key-type>
+        <value-type>com.anyqn.mastodon.pingen.models.cache.ClientCredentials</value-type>
+    </cache>
+    <cache alias="tweets_reading_limits" uses-template="defaultCacheTemplate">
+        <key-type>java.lang.String</key-type>
+        <value-type>byte[]</value-type>
+    </cache>
+
+
+
+</config>

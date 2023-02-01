@@ -1,0 +1,13 @@
+@startuml
+title Authorized request to Twitter
+Migrator -> Migrator : Request
+Migrator -> "local storage" : get twitter creads
+"storage" -> Migrator :  access_token, access_token_secret
+Migrator -> Pingen : /api/v1/twitter/getAuthHeader with call descriptor\naccess_token access_token_secret,url,method,params
+Pingen -> Pingen : Generate OAuth1.0a signed header for call descriptor
+Pingen -> Pingen : Generate OAuth1.0a signed header for token invalidation
+Pingen -> "server storage" : Save OAuth1.0a signed header for token invalidation
+Pingen -> Migrator : OAuth1.0a signed header for call descriptor
+Migrator -> Twitter : Call request with signed header
+Twitter -> Migrator : Response
+@enduml

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+    <property scope="context" name="appName" value="mtdn2twtr"/>
+    <property name="logToConsole" value="${log.to.console}"/>
+    <property name="logPath" value="./logs"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <Pattern>[%d{"yyyy-MM-dd HH:mm:ss,SSS zzz"}] %highlight(%-5level): %msg%n%throwable</Pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/${appName}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>[%d{"yyyy-MM-dd HH:mm:ss,SSS zzz"}] %-5level [${appName:-} %logger{59}:%M \(%F:%L\) [%t]:
+                %n%msg%n%throwable
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/${appName}_%d{dd-MM-yyyy}.%i.log.gz</fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="ASYNC_FILE"/>
+        <if condition='property("log.to.console").equals("true")'>
+            <then>
+                <appender-ref ref="ASYNC_CONSOLE"/>
+            </then>
+            <else>
+            </else>
+        </if>
+    </root>
+    <logger name="org.thymeleaf" level="info" additivity="false">
+        <appender-ref ref="ASYNC_FILE"/>
+        <if condition='property("log.to.console").equals("true")'>
+            <then>
+                <appender-ref ref="ASYNC_CONSOLE"/>
+            </then>
+            <else>
+            </else>
+        </if>
+    </logger>
+</configuration>
